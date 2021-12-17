@@ -3,10 +3,14 @@ package com.company.model;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.exc.MismatchedInputException;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.*;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Set;
 
 public class UsersStorage {
     private ArrayList<User> users;
@@ -49,5 +53,35 @@ public class UsersStorage {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public User addUser(MultipartFile file) {
+        ObjectMapper mapper = new ObjectMapper();
+        User newUser = null;
+        File tmpFile = new File("tmp.json");
+        try {
+            tmpFile.createNewFile();
+            file.transferTo(tmpFile.toPath());
+            newUser = mapper.readValue(tmpFile, new TypeReference<User>() {});
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            tmpFile.delete();
+        }
+        if(isUserValid(newUser)){
+            addUser(newUser);
+        } else {
+            newUser = null;
+        }
+        return newUser;
+    }
+
+    private boolean isUserValid(User newUser) {
+        if (newUser==null)
+            return false;
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+        Set<ConstraintViolation<User>> violations = validator.validate(newUser);
+        return violations.isEmpty();
     }
 }

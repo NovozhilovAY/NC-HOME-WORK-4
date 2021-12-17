@@ -6,13 +6,16 @@ import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.DataBinder;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
+import javax.validation.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.Date;
+import java.util.Objects;
+import java.util.Set;
 
 @Controller
 public class UserController {
@@ -50,5 +53,20 @@ public class UserController {
         } else {
             return "user-not-found";
         }
+    }
+
+    @GetMapping("/upload-user-file")
+    public String uploadUserFile(){
+        return "upload-user-file";
+    }
+
+    @PostMapping("/upload-file-submit")
+    public String uploadFileSubmit(@RequestParam("file") MultipartFile file, Model model) {
+        User newUser = storage.addUser(file);
+        if(newUser == null){
+            return "bad-file";
+        }
+        model.addAttribute("user", newUser);
+        return "result";
     }
 }
