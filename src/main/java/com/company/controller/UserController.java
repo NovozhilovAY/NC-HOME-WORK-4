@@ -1,5 +1,6 @@
 package com.company.controller;
 
+import com.company.model.EmailSender;
 import com.company.model.User;
 import com.company.model.UsersStorage;
 import com.sun.org.apache.xpath.internal.operations.Mod;
@@ -20,6 +21,12 @@ import java.util.Set;
 @Controller
 public class UserController {
     UsersStorage storage = new UsersStorage();
+    EmailSender emailSender = new EmailSender();
+
+    @GetMapping("/")
+    public String menu(){
+        return "menu";
+    }
 
     @GetMapping("/user-form")
     public String userForm(Model model){
@@ -68,5 +75,17 @@ public class UserController {
         }
         model.addAttribute("user", newUser);
         return "result";
+    }
+
+    @GetMapping("/send-email")
+    public String sendEmail(@RequestParam String email, Model model){
+        model.addAttribute("email", email);
+        return "send-email";
+    }
+
+    @PostMapping("/send-email-submit")
+    public String sendEmailSubmit(@RequestParam String email, @RequestParam String subject, @RequestParam String text){
+        emailSender.send(email, subject, text);
+        return "email-success";
     }
 }

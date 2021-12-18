@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Send email</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+    <h1>Send email</h1>
+        <form action="#" th:action="@{/send-email-submit}" method="post">
+            <p>Send to</p>
+            <input type="text" th:value="${email}" name = "email" readonly/>
+            <p>Subject</p>
+            <input type="text" name="subject" />
+            <p>Text</p>
+            <textarea type="text" name="text"> </textarea>
+            <p><input type="submit" value="Send" />
+        </form>
+</body>
+<a href="/">Menu</a>
+</html>
