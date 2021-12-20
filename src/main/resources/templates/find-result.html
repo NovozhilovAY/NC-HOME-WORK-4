@@ -6,7 +6,7 @@
 </head>
 <body>
 <h1>User found</h1>
-<form action="#" th:action="@{/send-email}" method="get">
+<form action="#" th:action="@{/send-email}" method="post">
 <p th:text="'Current time: ' + ${time}" />
 <p th:text="'Browser: ' + ${browser}" />
 <p th:text="'First name: ' + ${user.firstName}" />

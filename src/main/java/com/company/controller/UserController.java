@@ -3,20 +3,14 @@ package com.company.controller;
 import com.company.model.EmailSender;
 import com.company.model.User;
 import com.company.model.UsersStorage;
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.DataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.*;
-import java.io.File;
-import java.io.IOException;
+import javax.validation.Valid;
 import java.util.Date;
-import java.util.Objects;
-import java.util.Set;
 
 @Controller
 public class UserController {
@@ -34,7 +28,7 @@ public class UserController {
         return "user-form";
     }
 
-    @GetMapping("/result")
+    @PostMapping("/result")
     public String userSubmit(@ModelAttribute @Valid User user ,BindingResult bindingResult) {
         if(bindingResult.hasErrors())
             return "user-form";
@@ -49,7 +43,7 @@ public class UserController {
         return "find-user";
     }
 
-    @GetMapping("/find-result")
+    @PostMapping("/find-result")
     public String findResult(@RequestParam String firstName, @RequestParam String lastName,@RequestHeader("User-agent") String browser, Model model) {
         User user = storage.findUser(firstName, lastName);
         if(user != null){
@@ -77,7 +71,7 @@ public class UserController {
         return "result";
     }
 
-    @GetMapping("/send-email")
+    @PostMapping("/send-email")
     public String sendEmail(@RequestParam String email, Model model){
         model.addAttribute("email", email);
         return "send-email";
