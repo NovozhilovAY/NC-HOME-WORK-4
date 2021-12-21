@@ -47,10 +47,8 @@ public class UsersStorage {
         ObjectMapper mapper = new ObjectMapper();
         try {
             users = mapper.readValue(new File("users.json"), new TypeReference<ArrayList<User>>() {});
-        } catch (MismatchedInputException e) {
-            users = new ArrayList<>();
         } catch (IOException e) {
-            e.printStackTrace();
+            users = new ArrayList<>();
         }
     }
 
